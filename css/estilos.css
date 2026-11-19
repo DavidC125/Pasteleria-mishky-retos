@@ -467,3 +467,23 @@ img {
   outline: 3px solid var(--dorado);
   outline-offset: 2px;
 }
+
+/* Funciones extra: botón «Limpiar filtros» */
+.btn-limpiar {
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0.5rem 1.1rem;
+  border-radius: 999px;
+  border: 2px solid var(--rosa);
+  background: var(--blanco);
+  color: var(--rosa);
+}
+.btn-limpiar:hover {
+  background: var(--rosa);
+  color: var(--blanco);
+}
+.btn-limpiar:focus-visible {
+  outline: 3px solid var(--dorado);
+  outline-offset: 2px;
+}

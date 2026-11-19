@@ -11,6 +11,8 @@ const contFiltros = document.querySelector("#filtros");
 const buscador = document.querySelector("#buscador");
 const selOrden = document.querySelector("#orden");
 const chkDisponibles = document.querySelector("#solo-disponibles");
+const chkFavoritos = document.querySelector("#solo-favoritos");
+const btnLimpiar = document.querySelector("#limpiar");
 const grilla = document.querySelector("#grilla");
 const estado = document.querySelector("#estado");
 const aviso = document.querySelector("#aviso");
@@ -111,11 +113,14 @@ return {
 texto: buscador.value.trim().toLowerCase(),
 orden: selOrden.value,
 soloDisponibles: chkDisponibles.checked,
+soloFavoritos: chkFavoritos.checked,
 };
 }
-function coincide(p, { texto, soloDisponibles }) {
+function coincide(p, { texto, soloDisponibles, soloFavoritos }) {
 return (
-p.nombre.toLowerCase().includes(texto) && (!soloDisponibles || p.stock > 0)
+p.nombre.toLowerCase().includes(texto) &&
+(!soloDisponibles || p.stock > 0) &&
+(!soloFavoritos || p.destacado === true)
 );
 }
 function obtenerVisibles() {
@@ -249,6 +254,7 @@ const partes = [`Mostrando ${n} ${n === 1 ? "producto" : "productos"}`];
 partes.push(categoriaActiva === TODAS ? "en total" : `en «${categoriaActiva}»`);
 if (ctl.texto) partes.push(`con «${buscador.value.trim()}» en el nombre`);
 if (ctl.soloDisponibles) partes.push("(solo disponibles)");
+if (ctl.soloFavoritos) partes.push("(solo favoritos)");
 return partes.join(" ") + ".";
 }
 function renderizarCatalogo() {
@@ -299,7 +305,21 @@ contControles.addEventListener("input", (evento) => {
 if (evento.target.matches("#buscador")) refrescar();
 });
 contControles.addEventListener("change", (evento) => {
-if (evento.target.matches("#orden, #solo-disponibles")) refrescar();
+if (evento.target.matches("#orden, #solo-disponibles, #solo-favoritos")) refrescar();
+});
+// =============================================================
+// FUNCIÓN EXTRA 2 · Botón «Limpiar filtros»
+// =============================================================
+btnLimpiar.addEventListener("click", () => {
+buscador.value = "";
+selOrden.value = "";
+chkDisponibles.checked = false;
+chkFavoritos.checked = false;
+categoriaActiva = TODAS;
+marcarBotonActivo();
+actualizarHash();
+refrescar();
+buscador.focus();
 });
 // =============================================================
 // RETO 8 · Modal <dialog> con delegación sobre #grilla
